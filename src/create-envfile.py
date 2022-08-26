@@ -5,8 +5,8 @@ env_keys = list(dict(os.environ).keys())
 
 out_file = ""
 
-# Make sure the env keys are sorted to have reproducible output
-for key in sorted(env_keys):
+# Make sure the env keys have stable order in the resulting file
+for key in env_keys:
     if key.startswith("INPUT_ENVKEY_"):
         value = os.getenv(key, "")
 
