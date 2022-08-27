@@ -38,7 +38,8 @@ jobs:
           then
               echo "ERR"
           fi
-
+          echo "content:-----"
+          cat .env
   test-filename:
     runs-on: ubuntu-latest
 
