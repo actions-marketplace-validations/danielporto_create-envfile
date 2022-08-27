@@ -8,22 +8,32 @@ env_keys = list(dict(os.environ).keys())
 out_file = ""
 
 ordered_pattern = "INPUT_ENVKEY_\d+_"
-# Make sure the env keys are sorted to have reproducible output
+# Make sure the env keys are sorted to have deterministic output
+priority_envs = [ e for e in env_keys if re.match(ordered_pattern, key) ]
 # a custom sort function ensure the order of the elements that were numbered
-for key in sorted(env_keys, key=lambda x: int(x.split('_')[2]) if re.match(ordered_pattern,x) else sys.maxsize   ):
+priority_envs = sorted(priority_envs, key=lambda x: int(x.split('_')[2]))
+other_envs = [ e for e in env_keys if e not in priority_envs ]
+all_envs = list()
+all_envs.extend(priority_envs)
+all_envs.extend(other_envs)
+
+
+for key in all_envs:
     if key.startswith("INPUT_ENVKEY_"):
         value = os.getenv(key, "")
 
         # If the key is empty, throw an error.
         if value == "" and os.getenv("INPUT_FAIL_ON_EMPTY", "false") == "true":
             raise Exception(f"Empty env key found: {key}")
+
         # remove order id if exists:
         if re.match(ordered_pattern, key):
             key = re.split(ordered_pattern,key)[1]
         else:
             key = key.split("INPUT_ENVKEY_")[1]
+
         # if the value has spaces, use quotes
-        if " " in value:
+        if " " in value or "$" in value:
             out_file += "{}=\"{}\"\n".format(key, value)
         else:
             out_file += "{}={}\n".format(key, value)
