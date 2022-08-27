@@ -1,9 +1,9 @@
 name: "Create .env file while ensure the order of envs"
-description: "Yet another action to create a .env file with Github Secrets, designed as an extension of SpicyPizza/create-envfile to allow ordering envs."
+description: "Yet another action to create a .env file with Github Secrets, but allow ordering envs."
 author: "Daniel Porto"
 branding:
-  icon: "briefcase"
-  color: "gray-dark"
+  icon: "file-plus"
+  color: "green"
 inputs:
   file_name:
     description: "The filename for the envfile"
