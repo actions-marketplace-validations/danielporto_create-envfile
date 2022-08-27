@@ -1,20 +1,32 @@
 #!/usr/local/bin/python
 import os
+import re
+import sys
 
 env_keys = list(dict(os.environ).keys())
 
 out_file = ""
 
+ordered_pattern = "INPUT_ENVKEY_\d+_"
 # Make sure the env keys are sorted to have reproducible output
-for key in sorted(env_keys):
+# a custom sort function ensure the order of the elements that were numbered
+for key in sorted(env_keys, key=lambda x: int(x.split('_')[1]) if re.match(ordered_pattern,x) else sys.maxint   ):
     if key.startswith("INPUT_ENVKEY_"):
         value = os.getenv(key, "")
 
         # If the key is empty, throw an error.
         if value == "" and os.getenv("INPUT_FAIL_ON_EMPTY", "false") == "true":
             raise Exception(f"Empty env key found: {key}")
-
-        out_file += "{}={}\n".format(key.split("INPUT_ENVKEY_")[1], value)
+        # remove order id if exists:
+        if re.match(ordered_pattern, key):
+            key = re.split(ordered_pattern,key)[1]
+        else:
+            key = key.split("INPUT_ENVKEY_")[1]
+        # if the value has spaces, use quotes
+        if " " in value:
+            out_file += "{}=\"{}\"\n".format(key, value)
+        else:
+            out_file += "{}={}\n".format(key, value)
 
 # get directory name in which we want to create .env file
 directory = str(os.getenv("INPUT_DIRECTORY", ""))

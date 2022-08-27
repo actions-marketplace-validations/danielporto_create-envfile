@@ -15,12 +15,20 @@ jobs:
           envkey_DEBUG: false
           envkey_SOME_API_KEY: "123456abcdef"
           envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
+          envkey_10_A_NUMBERED_KEY: "lorem"
+          envkey_3_ANOTHER_NUMBERED_KEY: "ipsum"
+          envkey_5_NUMBERED_KEY_VALUE_WITH_SPACES: "lorem ipsum"
+          envkey_1_ONE_MORE_NUMBERED_KEY: true
           some_other_variable: foobar
           file_name: .env
 
       - name: Verify envfile
         run: |
           TEST=$(cat <<-END
+            ONE_MORE_NUMBERED_KEY=true
+            ANOTHER_NUMBERED_KEY=ipsum
+            NUMBERED_KEY_VALUE_WITH_SPACES="lorem ipsum"
+            A_NUMBERED_KEY=lorem
             DEBUG=false
             SECRET_KEY=password123
             SOME_API_KEY=123456abcdef

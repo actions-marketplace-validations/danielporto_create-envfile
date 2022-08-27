@@ -1,6 +1,6 @@
-name: "Create .env file"
-description: "Github Action to create a .env file with Github Secrets"
-author: "Forest Anderson"
+name: "Create .env file while ensure the order of envs"
+description: "Yet another action to create a .env file with Github Secrets, designed as an extension of SpicyPizza/create-envfile to allow ordering envs."
+author: "Daniel Porto"
 branding:
   icon: "briefcase"
   color: "gray-dark"
