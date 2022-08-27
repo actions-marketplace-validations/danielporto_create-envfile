@@ -9,7 +9,7 @@ out_file = ""
 
 ordered_pattern = "INPUT_ENVKEY_\d+_"
 # Make sure the env keys are sorted to have deterministic output
-priority_envs = [ e for e in env_keys if re.match(ordered_pattern, key) ]
+priority_envs = [ e for e in env_keys if re.match(ordered_pattern, e) ]
 # a custom sort function ensure the order of the elements that were numbered
 priority_envs = sorted(priority_envs, key=lambda x: int(x.split('_')[2]))
 other_envs = [ e for e in env_keys if e not in priority_envs ]
