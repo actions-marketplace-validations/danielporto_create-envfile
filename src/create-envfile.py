@@ -10,7 +10,7 @@ out_file = ""
 ordered_pattern = "INPUT_ENVKEY_\d+_"
 # Make sure the env keys are sorted to have reproducible output
 # a custom sort function ensure the order of the elements that were numbered
-for key in sorted(env_keys, key=lambda x: int(x.split('_')[1]) if re.match(ordered_pattern,x) else sys.maxint   ):
+for key in sorted(env_keys, key=lambda x: int(x.split('_')[1]) if re.match(ordered_pattern,x) else sys.maxsize   ):
     if key.startswith("INPUT_ENVKEY_"):
         value = os.getenv(key, "")
 
