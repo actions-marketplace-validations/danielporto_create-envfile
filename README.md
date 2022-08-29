@@ -56,7 +56,7 @@ the '.env' file:
 | `envkey_DEBUG`, `envkey_SOME_API_KEY` | These values can be whatever, and they will be added to the '.env' file as `DEBUG` and `SOME_API_KEY` .                                                                  |
 | `envkey_SECRET_KEY`                   | This one will use a secret stored in the repository's Github Secrets, and add it to the file as  `SECRET_KEY`                                                            |
 | `envkey_8_SOME_KEY`                   | This one defines a priority for the variables that appear in the resulting env file. Lower numbers appear first, prefixes are not included.                              |
-| `envkey_SOME_HASH!`                   | This one allow values that have special characters such as '$' in bash variables. Useful to pass tokens and hashes. In practice, the value is enclosed in single quotes. |
+| `envkey_SOME_HASH_`                   | This one allow values that have special characters such as '$' in bash variables. Useful to pass tokens and hashes. In practice, the value is enclosed in single quotes. |
 | `directory` (**Optional**)            | This key will set the directory in which you want to create `env` file. **Important: cannot start with `/`. Action will fail if the specified directory doesn't exist.** |
 | `file_name` (**Optional**)            | Set the name of the output '.env' file. Defaults to `.env`                                                                                                               |
 | `fail_on_empty` (**Optional**)        | If set to true, the Action will fail if any env key is empty. Default to `false`.                                                                                        |
