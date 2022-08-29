@@ -36,7 +36,7 @@ for key in all_envs:
             key = key.split("INPUT_ENVKEY_")[1]
 
         # if the value has spaces, use quotes
-        if key.endswith("_") in value: # enforce literal
+        if key.endswith("_"): # enforce literal
             out_file += "{}='{}'\n".format(key[:-1], value)
         elif " " in value or "$" in value: # for spaces and variables, use double quotes
             out_file += "{}=\"{}\"\n".format(key, value)
