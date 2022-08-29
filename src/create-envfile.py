@@ -36,28 +36,13 @@ for key in all_envs:
             key = key.split("INPUT_ENVKEY_")[1]
 
         # if the value has spaces, use quotes
-        if " " in value or "$" in value:
+        if key.endswith("!") in value: # enforce literal
+            out_file += "{}='{}'\n".format(key[:-1], value)
+        elif " " in value or "$" in value: # for spaces and variables, use double quotes
             out_file += "{}=\"{}\"\n".format(key, value)
-        else:
+        else: # all the rest do not include quotes
             out_file += "{}={}\n".format(key, value)
-    elif key.startswith("INPUT_ENVLITERAL_"):
-        value = os.getenv(key, "")
 
-        # If the key is empty, throw an error.
-        if value == "" and os.getenv("INPUT_FAIL_ON_EMPTY", "false") == "true":
-            raise Exception(f"Empty env key found: {key}")
-
-        # remove order id if exists:
-        if re.match(ordered_pattern, key):
-            key = re.split(ordered_pattern,key)[1]
-        else:
-            key = key.split("INPUT_ENVLITERAL_")[1]
-
-        # if the value has spaces, use quotes
-        if " " in value or "$" in value:
-            out_file += "{}='{}'\n".format(key, value)
-        else:
-            out_file += "{}={}\n".format(key, value)
 
 
 # get directory name in which we want to create .env file
