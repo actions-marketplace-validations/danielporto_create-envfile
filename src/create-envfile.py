@@ -12,7 +12,10 @@ ordered_pattern = "INPUT_ENVKEY_\d+_"
 priority_envs = [ e for e in env_keys if re.match(ordered_pattern, e) ]
 # a custom sort function ensure the order of the elements that were numbered
 priority_envs = sorted(priority_envs, key=lambda x: int(x.split('_')[2]))
+
 other_envs = [ e for e in env_keys if e not in priority_envs ]
+other_envs = sorted(other_envs)
+
 all_envs = list()
 all_envs.extend(priority_envs)
 all_envs.extend(other_envs)
