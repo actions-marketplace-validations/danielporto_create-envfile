@@ -91,19 +91,24 @@ for key in all_envs:
 
         # unpack envs (we assume the json is well formatted or prefixed with the filter):
         filter_pattern = "\w+\|"
-        if re.match(filter_pattern, jsonstr):
-            # print("NEWKEY:",key)
-            jsonkey=jsonstr[:jsonstr.find("|")]
-            # print("JSONKEY:",jsonkey)
-            jsonstr=jsonstr[jsonstr.find("|")+1:]    
-            env_pairs = json.loads(jsonstr)
-            for item in env_pairs:
-                if item['key'] == jsonkey:
-                    item['key'] = key
-                    break
-        else:
-            env_pairs = json.loads(jsonstr)
-
+        try:
+            if re.match(filter_pattern, jsonstr):
+                # print("NEWKEY:",key)
+                jsonkey=jsonstr[:jsonstr.find("|")]
+                # print("JSONKEY:",jsonkey)
+                jsonstr=jsonstr[jsonstr.find("|")+1:]    
+                env_pairs = json.loads(jsonstr)
+                for item in env_pairs:
+                    if item['key'] == jsonkey:
+                        item['key'] = key
+                        break
+            else:
+                env_pairs = json.loads(jsonstr)
+        except:
+            print("Json Key with error:", key)
+            print("Value with error:", jsonstr)
+            exit(1)
+            
         # lookup the value ignoring literal suffix
         value = find_value(key, env_pairs)
 
