@@ -22,11 +22,12 @@ jobs:
           envkey_3_ANOTHER_PRIORITIZED_KEY: "ipsum"
           envkey_5_PRIORITIZED_KEY_VALUE_WITH_SPACES: "lorem ipsum"
           envkey_1_ONE_MORE_PRIORITIZED_KEY: true
-          jsonkey_JVARKEY: '[{"key": "JVARKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEY2",	"value": "VARVALUE2"}]'
-          jsonkey_1_JVARKEY1: '[{"key": "JVARKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEY2",	"value": "VARVALUE2"}]'
-          jsonkey_JVARKEYSPACE: '[{"key": "JVARKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEYSPACE",	"value": "VAR KEY SPACE"}]'
-          jsonkey_JVARKEYVAR: '[{"key": "JVARKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEYVAR",	"value": "$VAR"}]'
-          jsonkey_JVARKEYLITERAL_: '[{"key": "JVARKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEYLITERAL",	"value": "$VA%%%R"}]'
+          jsonkey_JVARKEY:                      '[{"key": "JVARKEY",	"value": "VARVALUE"}, {"key": "OVERRIDEKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEY2",	"value": "VARVALUE2"}, {	"key": "JVARKEYSPACE",	"value": "VAR KEY SPACE"}, {	"key": "JVARKEYVAR",	"value": "$VAR"}, {	"key": "JVARKEYLITERAL",	"value": "$VA%%%R"}]'
+          jsonkey_1_JVARKEY1:                   '[{"key": "JVARKEY",	"value": "VARVALUE"}, {"key": "OVERRIDEKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEY2",	"value": "VARVALUE2"}, {	"key": "JVARKEYSPACE",	"value": "VAR KEY SPACE"}, {	"key": "JVARKEYVAR",	"value": "$VAR"}, {	"key": "JVARKEYLITERAL",	"value": "$VA%%%R"}]'
+          jsonkey_JVARKEYSPACE:                 '[{"key": "JVARKEY",	"value": "VARVALUE"}, {"key": "OVERRIDEKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEY2",	"value": "VARVALUE2"}, {	"key": "JVARKEYSPACE",	"value": "VAR KEY SPACE"}, {	"key": "JVARKEYVAR",	"value": "$VAR"}, {	"key": "JVARKEYLITERAL",	"value": "$VA%%%R"}]'
+          jsonkey_JVARKEYVAR:                   '[{"key": "JVARKEY",	"value": "VARVALUE"}, {"key": "OVERRIDEKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEY2",	"value": "VARVALUE2"}, {	"key": "JVARKEYSPACE",	"value": "VAR KEY SPACE"}, {	"key": "JVARKEYVAR",	"value": "$VAR"}, {	"key": "JVARKEYLITERAL",	"value": "$VA%%%R"}]'
+          jsonkey_JVARKEYLITERAL_:              '[{"key": "JVARKEY",	"value": "VARVALUE"}, {"key": "OVERRIDEKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEY2",	"value": "VARVALUE2"}, {	"key": "JVARKEYSPACE",	"value": "VAR KEY SPACE"}, {	"key": "JVARKEYVAR",	"value": "$VAR"}, {	"key": "JVARKEYLITERAL",	"value": "$VA%%%R"}]'
+          jsonkey_JVARKEYWITHALIAS: 'OVERRIDEKEY|[{"key": "JVARKEY",	"value": "VARVALUE"}, {"key": "OVERRIDEKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEY2",	"value": "VARVALUE2"}, {	"key": "JVARKEYSPACE",	"value": "VAR KEY SPACE"}, {	"key": "JVARKEYVAR",	"value": "$VAR"}, {	"key": "JVARKEYLITERAL",	"value": "$VA%%%R"}]'
           some_other_variable: foobar
           file_name: .env
 
@@ -45,6 +46,7 @@ jobs:
             echo "JVARKEYLITERAL='\$VA%%%R'" >> .env-expected 
             echo 'JVARKEYSPACE="VAR KEY SPACE"' >> .env-expected 
             echo 'JVARKEYVAR="$VAR"' >> .env-expected 
+            echo 'JVARKEYWITHALIAS=VARVALUE' >> .env-expected 
             echo 'SECRET_KEY=password123' >> .env-expected 
             echo 'SOME_API_KEY=123456abcdef' >> .env-expected 
             echo "SOME_API_KEYLITERAL='123456abcdef'" >> .env-expected 
