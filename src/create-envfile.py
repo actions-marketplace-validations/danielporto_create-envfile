@@ -45,7 +45,7 @@ if priority_envs:
 # retrieve the other non prioritized envs
 other_envs = [ e for e in env_keys if (re.match("INPUT_ENVKEY", e) or re.match("INPUT_JSONKEY", e)) and e not in priority_envs ]
 # sort the other non prioritized elements alphabetically
-other_envs = sorted(other_envs, key=lambda x: x.split('_')[2])
+other_envs = sorted(other_envs, key=lambda x: '_'.join(x.split('_')[2:]))
 # pp(other_envs)
 
 all_envs = list()
@@ -92,9 +92,9 @@ for key in all_envs:
         # unpack envs (we assume the json is well formatted or prefixed with the filter):
         filter_pattern = "\w+\|"
         if re.match(filter_pattern, jsonstr):
-            print("NEWKEY:",key)
+            # print("NEWKEY:",key)
             jsonkey=jsonstr[:jsonstr.find("|")]
-            print("JSONKEY:",jsonkey)
+            # print("JSONKEY:",jsonkey)
             jsonstr=jsonstr[jsonstr.find("|")+1:]    
             env_pairs = json.loads(jsonstr)
             for item in env_pairs:
@@ -103,7 +103,6 @@ for key in all_envs:
                     break
         else:
             env_pairs = json.loads(jsonstr)
-        # pp(env_pairs)
 
         # lookup the value ignoring literal suffix
         if key.endswith("_"):
