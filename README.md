@@ -40,6 +40,7 @@ jobs:
         envkey_3_ANOTHER_NUMBERED_KEY: "ipsum"
         envkey_5_NUMBERED_KEY_VALUE_WITH_SPACES: "lorem ipsum"
         envkey_1_ONE_MORE_NUMBERED_KEY: true
+        jsonkey_VARKEY1: '[{"key": "VARKEY",	"value": "VARVALUE"}, {	"key": "VARKEY1",	"value": "VARVALUE1"}, {	"key": "VARKEY2",	"value": "VARVALUE2"}]'
         some_other_variable: foobar
         directory: <directory_name>
         file_name: .env
@@ -57,9 +58,17 @@ the '.env' file:
 | `envkey_SECRET_KEY`                   | This one will use a secret stored in the repository's Github Secrets, and add it to the file as  `SECRET_KEY`                                                            |
 | `envkey_8_SOME_KEY`                   | This one defines a priority for the variables that appear in the resulting env file. Lower numbers appear first, prefixes are not included.                              |
 | `envkey_SOME_HASH_`                   | This one allow values that have special characters such as '$' in bash variables. Useful to pass tokens and hashes. In practice, the value is enclosed in single quotes. |
+| `jsonkey_VARKEY1`                      | This one allow values to be retrieved from a json string. Useful to overcome the Github secret limits. (All the above annotations apply)                                 |
 | `directory` (**Optional**)            | This key will set the directory in which you want to create `env` file. **Important: cannot start with `/`. Action will fail if the specified directory doesn't exist.** |
 | `file_name` (**Optional**)            | Set the name of the output '.env' file. Defaults to `.env`                                                                                                               |
 | `fail_on_empty` (**Optional**)        | If set to true, the Action will fail if any env key is empty. Default to `false`.                                                                                        |
+
+Note that the jsonkey has a json as value and the key name can be looked up from
+it. That's useful when we need to compact several variables in a single secret
+string, for instance, to overcome the Github limit of 100 secrets per
+repository/workflow. Attention only that the size of the secret cannot be
+greater than 64K.
+More info: https://docs.github.com/en/actions/security-guides/encrypted-secrets#limits-for-secrets
 
 Assuming that the Github Secret that was used is `password123`, the '.env' file
 that is created from the config above would contain:
@@ -72,6 +81,7 @@ A_NUMBERED_KEY=lorem
 DEBUG=false
 SOME_API_KEY="123456abcdef"
 SECRET_KEY=password123
+VARKEY1=VARVALUE1
 ```
 
 ## Potential Issues

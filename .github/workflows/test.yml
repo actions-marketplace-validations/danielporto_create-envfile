@@ -9,38 +9,59 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
+      # TODO           envkey_SOME_API_KEY_LITERAL_ this entry fails. is sorted before envkey_SOME_API_KEY
       - name: Make envfile
         uses: ./
         with:
           envkey_DEBUG: false
           envkey_SOME_API_KEY: "123456abcdef"
+          envkey_SOME_API_KEYLITERAL_: "123456abcdef"
           envkey_SECRET_KEY: ${{ secrets.SECRET_KEY }}
           envkey_CONTENT_IS_VAR: "$ENVVAR"
-          envkey_10_A_NUMBERED_KEY: "lorem"
-          envkey_3_ANOTHER_NUMBERED_KEY: "ipsum"
-          envkey_5_NUMBERED_KEY_VALUE_WITH_SPACES: "lorem ipsum"
-          envkey_1_ONE_MORE_NUMBERED_KEY: true
+          envkey_10_A_PRIORITIZED_KEY: "lorem"
+          envkey_3_ANOTHER_PRIORITIZED_KEY: "ipsum"
+          envkey_5_PRIORITIZED_KEY_VALUE_WITH_SPACES: "lorem ipsum"
+          envkey_1_ONE_MORE_PRIORITIZED_KEY: true
+          jsonkey_JVARKEY: '[{"key": "JVARKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEY2",	"value": "VARVALUE2"}]'
+          jsonkey_1_JVARKEY1: '[{"key": "JVARKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEY2",	"value": "VARVALUE2"}]'
+          jsonkey_JVARKEYSPACE: '[{"key": "JVARKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEYSPACE",	"value": "VAR KEY SPACE"}]'
+          jsonkey_JVARKEYVAR: '[{"key": "JVARKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEYVAR",	"value": "$VAR"}]'
+          jsonkey_JVARKEYLITERAL_: '[{"key": "JVARKEY",	"value": "VARVALUE"}, {	"key": "JVARKEY1",	"value": "VARVALUE1"}, {	"key": "JVARKEYLITERAL",	"value": "$VA%%%R"}]'
           some_other_variable: foobar
           file_name: .env
 
+
       - name: Verify envfile
         run: |
-          TEST=$(cat <<-END
-            ONE_MORE_NUMBERED_KEY=true
-            ANOTHER_NUMBERED_KEY=ipsum
-            NUMBERED_KEY_VALUE_WITH_SPACES="lorem ipsum"
-            A_NUMBERED_KEY=lorem
-            DEBUG=false
-            SECRET_KEY=password123
-            SOME_API_KEY=123456abcdef
-          END
-          )
-          if [ "$TEST" != "$(cat .env)" ]
-          then
-              echo "ERR"
-          fi
-          echo "content:-----"
-          cat .env
+            rm -f .env-expected 
+            echo 'JVARKEY1=VARVALUE1' >> .env-expected 
+            echo 'ONE_MORE_PRIORITIZED_KEY=true' >> .env-expected 
+            echo 'ANOTHER_PRIORITIZED_KEY=ipsum' >> .env-expected 
+            echo 'PRIORITIZED_KEY_VALUE_WITH_SPACES="lorem ipsum"' >> .env-expected 
+            echo 'A_PRIORITIZED_KEY=lorem' >> .env-expected 
+            echo 'CONTENT_IS_VAR="$ENVVAR"' >> .env-expected 
+            echo 'DEBUG=false' >> .env-expected 
+            echo 'JVARKEY=VARVALUE' >> .env-expected 
+            echo "JVARKEYLITERAL='\$VA%%%R'" >> .env-expected 
+            echo 'JVARKEYSPACE="VAR KEY SPACE"' >> .env-expected 
+            echo 'JVARKEYVAR="$VAR"' >> .env-expected 
+            echo 'SECRET_KEY=password123' >> .env-expected 
+            echo 'SOME_API_KEY=123456abcdef' >> .env-expected 
+            echo "SOME_API_KEYLITERAL='123456abcdef'" >> .env-expected 
+
+            EXPECTED_ENV_HASH=$(md5sum .env-expected | cut -d " " -f 1)
+            echo $EXPECTED_ENV_HASH
+            GENERATED_ENV_HASH=$(md5sum .env | cut -d " " -f 1)
+            echo $GENERATED_ENV_HASH
+            if [ "${GENERATED_ENV_HASH}" != "${EXPECTED_ENV_HASH}" ]; then
+                echo "FAILURE"
+                echo "EXPECTED x GENERATED ----------------------------------------------------------"
+                diff -y .env-expected .env
+                exit 1
+            else
+              echo "SUCCESS ----------------------------------------------------------"
+              cat .env
+            fi
   test-filename:
     runs-on: ubuntu-latest
 
