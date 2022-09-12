@@ -105,19 +105,16 @@ for key in all_envs:
             env_pairs = json.loads(jsonstr)
 
         # lookup the value ignoring literal suffix
-        if key.endswith("_"):
-            value = find_value(key[:-1], env_pairs)
-        else: 
-            value = find_value(key, env_pairs)
+        value = find_value(key, env_pairs)
 
         # If the key is empty, throw an error.
         if value == "" and os.getenv("INPUT_FAIL_ON_EMPTY", "false") == "true":
             raise Exception(f"Empty json key found: {key}")
 
+        # print("{}='{}'\n".format(key, value))
         # if the value has spaces, use quotes
         if key.endswith("_"): # enforce literal
-            print(key)
-            print("{}='{}'\n".format(key[:-1], value))
+            # print(key)
             out_file += "{}='{}'\n".format(key[:-1], value)
         elif " " in value or "$" in value: # for spaces and variables, use double quotes
             out_file += "{}=\"{}\"\n".format(key, value)
