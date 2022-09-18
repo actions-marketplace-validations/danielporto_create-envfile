@@ -18,7 +18,7 @@ out_file = ""
 
 # ordered_pattern = "INPUT_ENVKEY_4_VAR"
 # ordered_json_pattern = "INPUT_JSONKEY_1_VAR"
-prioritized_vars_pattern = "INPUT_\w+_\d+_"
+prioritized_vars_pattern = "INPUT_(JSONKEY|ENVKEY)_\d+_"
 
 # extract prioritized keys
 priority_envs = [ e for e in env_keys if re.match(prioritized_vars_pattern, e) ]
