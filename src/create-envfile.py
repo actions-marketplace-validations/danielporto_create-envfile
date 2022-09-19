@@ -27,6 +27,7 @@ priority_envs = [ e for e in env_keys if re.match(prioritized_vars_pattern, e) ]
 if priority_envs:
     priority_map = dict()
     for entry in priority_envs:
+        # print("Entry analized:",entry)
         priority = int(entry.split('_')[2])
         if priority in priority_map:
             priority_map[priority].append(entry)
@@ -63,8 +64,9 @@ for key in all_envs:
             raise Exception(f"Empty env key found: {key}")
 
         # remove order id if exists:
+        # print(f"Processing key: {key}")
         if re.match(prioritized_vars_pattern, key):
-            key = re.split(prioritized_vars_pattern, key)[1]
+            key = re.split(prioritized_vars_pattern, key)[2]
         else:
             key = key.split("INPUT_ENVKEY_")[1]
 
@@ -84,8 +86,9 @@ for key in all_envs:
             raise Exception(f"Empty env key found: {key}")
 
         # remove order id if exists:
+        # print(f"Processing key: {key}")
         if re.match(prioritized_vars_pattern, key):
-            key = re.split(prioritized_vars_pattern,key)[1]
+            key = re.split(prioritized_vars_pattern,key)[2]
         else:
             key = key.split("INPUT_JSONKEY_")[1]
 
